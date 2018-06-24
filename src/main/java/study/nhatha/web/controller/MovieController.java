@@ -17,15 +17,16 @@ public final class MovieController {
   public static class AllMoviesHandler implements Route {
 
     @Override
-    public Object handle(Request request, Response response) throws Exception {
+    public Object handle(Request request, Response response) {
       List<Movie> movies = movieRepository.all();
 
-      String xmlMovies = movies
+      return movies
           .stream()
           .map(movie -> XmlUtils.marshal(movie, Movie.class))
           .collect(Collectors.joining());
-
-      return xmlMovies;
     }
+  }
+
+  private MovieController() {
   }
 }
