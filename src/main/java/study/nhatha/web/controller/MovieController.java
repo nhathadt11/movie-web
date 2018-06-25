@@ -6,6 +6,7 @@ import spark.Route;
 import study.nhatha.model.Movie;
 import study.nhatha.repository.HibernateMovieRepository;
 import study.nhatha.repository.MovieRepository;
+import study.nhatha.web.error.MovieNotFoundException;
 import study.nhatha.web.util.XmlUtils;
 
 import java.util.List;
@@ -24,6 +25,20 @@ public final class MovieController {
           .stream()
           .map(movie -> XmlUtils.marshal(movie, Movie.class))
           .collect(Collectors.joining());
+    }
+  }
+
+  public static class MovieDetailHandler implements Route {
+
+    @Override
+    public Object handle(Request request, Response response) throws Exception {
+      long id = Long.parseLong(request.params(":id"));
+
+      Movie movie = movieRepository
+          .one(id)
+          .orElseThrow(MovieNotFoundException::new);
+
+      return XmlUtils.marshal(movie, Movie.class);
     }
   }
 
