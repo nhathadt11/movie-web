@@ -3,9 +3,7 @@ package study.nhatha.web;
 import study.nhatha.web.controller.MovieController;
 import study.nhatha.web.error.MovieNotFoundException;
 
-import static spark.Spark.after;
-import static spark.Spark.exception;
-import static spark.Spark.get;
+import static spark.Spark.*;
 
 /**
  * Hello world!
@@ -23,7 +21,7 @@ public class WebApp {
 
     exception(MovieNotFoundException.class, (exp, req, res) -> {
       res.status(404);
-      res.type("text/html;charset=utf-8");
+      res.type("text/html,text/xml,application/xml;charset=utf-8");
       res.body("<errors><reason>" + exp.getMessage() + "</reason></errors>");
     });
   }
