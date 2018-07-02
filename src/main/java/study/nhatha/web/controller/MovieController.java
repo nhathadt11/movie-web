@@ -28,6 +28,21 @@ public final class MovieController {
     }
   }
 
+  public static class PageMoviesHandler implements Route {
+
+    @Override
+    public Object handle(Request request, Response response) {
+      int pageNumber = Integer.parseInt(request.params(":pageNumber"), 10);
+
+      List<Movie> movies = movieRepository.allByPage(pageNumber);
+
+      return movies
+          .stream()
+          .map(movie -> XmlUtils.marshal(movie, Movie.class))
+          .collect(Collectors.joining());
+    }
+  }
+
   public static class MovieDetailHandler implements Route {
 
     @Override

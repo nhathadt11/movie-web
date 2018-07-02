@@ -22,6 +22,7 @@ public class WebApp {
 
     get("/movies",      new MovieController.AllMoviesHandler());
     get("/movies/:id",  new MovieController.MovieDetailHandler());
+    get("/movies/page/:pageNumber", new MovieController.PageMoviesHandler());
 
     exception(MovieNotFoundException.class, (exp, req, res) -> {
       res.status(404);
