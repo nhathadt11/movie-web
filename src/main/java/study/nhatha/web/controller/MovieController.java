@@ -28,13 +28,14 @@ public final class MovieController {
     }
   }
 
-  public static class PageMoviesHandler implements Route {
+  public static class MoviesByTitleLikeAndPage implements Route {
 
     @Override
-    public Object handle(Request request, Response response) {
+    public Object handle(Request request, Response response) throws Exception {
       int pageNumber = Integer.parseInt(request.params(":pageNumber"), 10);
+      String title = request.queryParamOrDefault("title", "");
 
-      List<Movie> movies = movieRepository.allByPage(pageNumber);
+      List<Movie> movies = movieRepository.findByPageAndTitleLike(pageNumber, title);
 
       return movies
           .stream()
