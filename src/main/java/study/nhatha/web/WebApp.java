@@ -18,7 +18,7 @@ public class WebApp {
     configLog();
 
     after((request, response) -> response.type("text/html,text/xml,application/xml;charset=utf-8"));
-    after((request, response) -> response.body(XML_DECLARATION + "<movies>" + response.body() + "</movies>"));
+    after((request, response) -> response.body(XML_DECLARATION + response.body()));
 
     get("/movies",      new MovieController.AllMoviesHandler());
     get("/movies/:id",  new MovieController.MovieDetailHandler());

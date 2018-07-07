@@ -7,12 +7,14 @@ import study.nhatha.model.Movie;
 import study.nhatha.repository.HibernateMovieRepository;
 import study.nhatha.repository.MovieRepository;
 import study.nhatha.web.error.MovieNotFoundException;
+import study.nhatha.web.model.MovieList;
 import study.nhatha.web.util.XmlUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public final class MovieController {
+  private static int PAGE_SIZE = 20;
   private static MovieRepository movieRepository = HibernateMovieRepository.getInstance();
 
   public static class AllMoviesHandler implements Route {
@@ -36,11 +38,14 @@ public final class MovieController {
       String title = request.queryParamOrDefault("title", "");
 
       List<Movie> movies = movieRepository.findByPageAndTitleLike(pageNumber, title);
+      long count = movieRepository.countByTitleLike(title);
 
-      return movies
-          .stream()
-          .map(movie -> XmlUtils.marshal(movie, Movie.class))
-          .collect(Collectors.joining());
+      MovieList movieList = new MovieList();
+      movieList.setMovies(movies);
+      movieList.setPageSize(PAGE_SIZE);
+      movieList.setTotalCount(count);
+
+      return XmlUtils.marshal(movieList, MovieList.class);
     }
   }
 
