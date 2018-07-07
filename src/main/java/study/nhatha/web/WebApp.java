@@ -14,6 +14,7 @@ public class WebApp {
   private static final String XML_DECLARATION = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>";
 
   public static void main( String[] args ) {
+    configPort();
     configCors();
     configLog();
 
@@ -29,6 +30,16 @@ public class WebApp {
       res.type("text/html,text/xml,application/xml;charset=utf-8");
       res.body("<errors><reason>" + exp.getMessage() + "</reason></errors>");
     });
+  }
+
+  private static void configPort() {
+    int port = 4567;
+
+    if (System.getenv("PORT") != null) {
+      port = Integer.parseInt(System.getenv("PORT"));
+    }
+
+    port(port);
   }
 
   private static void configLog() {
