@@ -1,7 +1,5 @@
 package study.nhatha.web.model;
 
-import study.nhatha.model.Movie;
-
 import javax.xml.bind.annotation.*;
 import java.util.List;
 
@@ -14,19 +12,21 @@ public class MovieList {
 
   @XmlAttribute(name = "totalCount", required = true, namespace = "http://movie.vn/MovieListSchema")
   private long totalCount;
+
   @XmlAttribute(name = "pageSize", required = true, namespace = "http://movie.vn/MovieListSchema")
   private int pageSize;
-  @XmlElements(@XmlElement(name = "movie", type = Movie.class, namespace = "http://movie.vn/MovieSchema"))
-  private List<Movie> movies;
+
+  @XmlElements(@XmlElement(name = "movie", type = MovieLight.class, namespace = "http://movie.vn/MovieSchema"))
+  private List<MovieLight> movies;
 
   public MovieList() {
   }
 
-  public List<Movie> getMovies() {
+  public List<MovieLight> getMovies() {
     return movies;
   }
 
-  public void setMovies(List<Movie> movies) {
+  public void setMovies(List<MovieLight> movies) {
     this.movies = movies;
   }
 

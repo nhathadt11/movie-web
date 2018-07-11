@@ -7,6 +7,7 @@ import study.nhatha.model.Movie;
 import study.nhatha.repository.HibernateMovieRepository;
 import study.nhatha.repository.MovieRepository;
 import study.nhatha.web.error.MovieNotFoundException;
+import study.nhatha.web.model.MovieLight;
 import study.nhatha.web.model.MovieList;
 import study.nhatha.web.util.XmlUtils;
 
@@ -25,19 +26,24 @@ public final class MovieController {
 
       return movies
           .stream()
-          .map(movie -> XmlUtils.marshal(movie, Movie.class))
+          .map(MovieLight::fromMovie)
+          .map(light -> XmlUtils.marshal(light, MovieLight.class))
           .collect(Collectors.joining());
     }
   }
 
-  public static class MoviesByTitleLikeAndPage implements Route {
+  public static class MoviesByPageAndTitleLike implements Route {
 
     @Override
     public Object handle(Request request, Response response) throws Exception {
       int pageNumber = Integer.parseInt(request.params(":pageNumber"), 10);
       String title = request.queryParamOrDefault("title", "");
 
-      List<Movie> movies = movieRepository.findByPageAndTitleLike(pageNumber, title);
+      List<MovieLight> movies = movieRepository
+          .findByPageAndTitleLike(pageNumber, title)
+          .stream()
+          .map(MovieLight::fromMovie)
+          .collect(Collectors.toList());
       long count = movieRepository.countByTitleLike(title);
 
       MovieList movieList = new MovieList();

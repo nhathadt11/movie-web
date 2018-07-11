@@ -21,9 +21,9 @@ public class WebApp {
     after((request, response) -> response.type("text/html,text/xml,application/xml;charset=utf-8"));
     after((request, response) -> response.body(XML_DECLARATION + response.body()));
 
-    get("/movies",      new MovieController.AllMoviesHandler());
-    get("/movies/:id",  new MovieController.MovieDetailHandler());
-    get("/movies/page/:pageNumber", new MovieController.MoviesByTitleLikeAndPage());
+    get("/movies",                  new MovieController.AllMoviesHandler());
+    get("/movies/:id",              new MovieController.MovieDetailHandler());
+    get("/movies/page/:pageNumber", new MovieController.MoviesByPageAndTitleLike());
 
     exception(MovieNotFoundException.class, (exp, req, res) -> {
       res.status(404);
