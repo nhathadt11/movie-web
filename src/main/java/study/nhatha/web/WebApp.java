@@ -1,6 +1,8 @@
 package study.nhatha.web;
 
 import org.eclipse.jetty.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import study.nhatha.web.controller.MovieController;
 import study.nhatha.web.error.MovieNotFoundException;
 
@@ -12,6 +14,7 @@ import static spark.Spark.*;
  */
 public class WebApp {
   private static final String XML_DECLARATION = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>";
+  private static final Logger LOGGER = LoggerFactory.getLogger(WebApp.class);
 
   public static void main( String[] args ) {
     configPort();
@@ -30,6 +33,8 @@ public class WebApp {
       res.type("text/html,text/xml,application/xml;charset=utf-8");
       res.body("<errors><reason>" + exp.getMessage() + "</reason></errors>");
     });
+
+    exception(Exception.class, (exp, req, res) -> LOGGER.error(exp.getMessage()));
   }
 
   private static void configPort() {
@@ -43,7 +48,7 @@ public class WebApp {
   }
 
   private static void configLog() {
-    before(((request, response) -> System.out.println(request.requestMethod() + request.uri())));
+    before((request, response) -> LOGGER.info(String.format("[%s] %s", request.requestMethod(), request.uri())));
   }
 
   private static void configCors() {
