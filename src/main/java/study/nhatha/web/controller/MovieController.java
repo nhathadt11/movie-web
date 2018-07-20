@@ -40,11 +40,11 @@ public final class MovieController {
       String title = request.queryParamOrDefault("title", "");
 
       List<MovieLight> movies = movieRepository
-          .findByPageAndTitleLike(pageNumber, title)
+          .pageAndFullTextSearch(pageNumber, title)
           .stream()
           .map(MovieLight::fromMovie)
           .collect(Collectors.toList());
-      long count = movieRepository.countByTitleLike(title);
+      long count = movieRepository.countByTitleFullTextSearch(title);
 
       MovieList movieList = new MovieList();
       movieList.setMovies(movies);
